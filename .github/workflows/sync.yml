@@ -1,0 +1,28 @@
+name: Sync pharmacy data
+
+on:
+  schedule:
+    - cron: '25 17 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run sync
+        env:
+          EGEN_API_KEY: ${{ secrets.EGEN_API_KEY }}
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add stores
+          git diff --cached --quiet || git commit -m "chore: 약국 위치 데이터 동기화"
+          git push

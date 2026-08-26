@@ -1,0 +1,7 @@
+{
+  "name": "large-pharmacy-navi-data",
+  "private": true,
+  "scripts": {
+    "sync": "node scripts/sync.js"
+  }
+}
